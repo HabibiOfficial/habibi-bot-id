@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habibi REST API — Dokumentasi</title>
+<meta name="description" content="Dokumentasi & tester interaktif Habibi REST API — AI chat, downloader TikTok & YouTube.">
+<style>
+:root{
+  --bg:#0b0e17; --bg2:#111527; --card:#161b30; --border:#263052;
+  --txt:#e8ecf8; --muted:#9aa3c7; --acc:#6c8cff; --acc2:#9d7bff;
+  --ok:#3ddc84; --err:#ff6b6b; --warn:#ffb020; --code:#0a0d16;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;line-height:1.6;min-height:100vh}
+a{color:var(--acc)}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 60px}
+/* header */
+header{position:sticky;top:0;z-index:10;background:rgba(11,14,23,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.hd{max-width:960px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.logo{font-size:26px}
+.hd h1{font-size:17px;font-weight:700}
+.hd .ver{font-size:11px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2px 10px;color:var(--muted)}
+.status{margin-left:auto;display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.dot{width:10px;height:10px;border-radius:50%;background:#555;flex:none}
+.dot.ok{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.dot.err{background:var(--err);box-shadow:0 0 8px var(--err)}
+/* hero */
+.hero{padding:38px 0 10px;text-align:center}
+.hero h2{font-size:clamp(24px,5vw,38px);font-weight:800;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:8px}
+.hero p{color:var(--muted);max-width:640px;margin:0 auto 6px;font-size:15px}
+.badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.badge{font-size:12px;border:1px solid var(--border);background:var(--card);border-radius:20px;padding:4px 12px;color:var(--muted)}
+.badge b{color:var(--txt)}
+/* cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-top:18px}
+.card h3{font-size:16px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.card p.d{color:var(--muted);font-size:13.5px;margin-bottom:8px}
+/* form */
+label{font-size:12.5px;color:var(--muted);display:block;margin:10px 0 4px}
+input[type=text],input[type=password],textarea{width:100%;background:var(--code);border:1px solid var(--border);border-radius:10px;color:var(--txt);padding:10px 12px;font-size:14px;font-family:inherit}
+input:focus,textarea:focus{outline:none;border-color:var(--acc)}
+textarea{resize:vertical;min-height:70px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>div{flex:1;min-width:200px}
+button{cursor:pointer;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600;font-family:inherit}
+.btn{background:linear-gradient(90deg,var(--acc),var(--acc2));color:#fff;margin-top:12px}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:var(--bg2);border:1px solid var(--border);color:var(--txt)}
+.hint{font-size:12px;color:var(--muted);margin-top:8px}
+/* endpoint */
+.ep{border:1px solid var(--border);border-radius:14px;margin-top:14px;overflow:hidden;background:var(--card)}
+.ep-h{padding:14px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;cursor:pointer;user-select:none}
+.m{font-size:11px;font-weight:800;border-radius:6px;padding:3px 9px;letter-spacing:.5px}
+.m.get{background:#123a2a;color:var(--ok)} .m.post{background:#3a2a12;color:var(--warn)}
+.path{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;font-weight:600}
+.lock{font-size:11px;border:1px solid var(--border);border-radius:20px;padding:2px 10px;color:var(--muted)}
+.lock.y{color:var(--warn);border-color:#5a4418}
+.ep-b{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.ep.open .ep-b{display:block}
+.ep.open .ep-h{border-bottom:1px solid var(--border)}
+pre{background:var(--code);border:1px solid var(--border);border-radius:10px;padding:12px;overflow-x:auto;font-size:12.5px;margin-top:10px;white-space:pre-wrap;word-break:break-word;max-height:380px;overflow-y:auto}
+pre .k{color:var(--acc)} pre .s{color:var(--ok)}
+.resp-ok{border-color:#1d4a33} .resp-err{border-color:#5a2525}
+/* footer */
+footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border)}
+.note{background:#141a2e;border:1px dashed var(--border);border-radius:10px;padding:12px;font-size:13px;color:var(--muted);margin-top:12px}
+.note b{color:var(--warn)}
+code{background:var(--code);border:1px solid var(--border);border-radius:6px;padding:1px 7px;font-size:12.5px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.tabs{display:flex;gap:8px;margin-top:10px}
+.tab{font-size:12.5px;padding:6px 14px;border-radius:20px;background:var(--bg2);border:1px solid var(--border);color:var(--muted)}
+.tab.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+</style>
+</head>
+<body>
+<header><div class="hd">
+  <span class="logo">🤖</span><h1>Habibi REST API</h1><span class="ver">v1.0.0</span>
+  <span class="status"><span class="dot" id="dot"></span><span id="stxt">mengecek…</span></span>
+</div></header>
+<div class="wrap">
+
+  <div class="hero">
+    <h2>Dokumentasi & Tester API</h2>
+    <p>REST API untuk <b>Habibi Bot ID</b> — AI chat, downloader TikTok & YouTube, info stiker. Coba langsung dari halaman ini.</p>
+    <div class="badges">
+      <span class="badge">🔑 Auth: header <b>x-api-key</b></span>
+      <span class="badge">⏱️ Limit: <b>60 req/menit</b>/IP</span>
+      <span class="badge">🌐 <b id="burl">—</b></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>⚙️ Konfigurasi</h3>
+    <p class="d">Isi base URL API dan API key sekali saja — tersimpan di browser ini.</p>
+    <div class="row">
+      <div><label>Base URL API</label><input type="text" id="baseUrl" placeholder="https://cloud.habibi-api.web.id"></div>
+      <div><label>API Key (header x-api-key)</label><input type="password" id="apiKey" placeholder="tempel API key di sini"></div>
+    </div>
+    <button class="btn" onclick="saveCfg()">💾 Simpan & Tes Koneksi</button>
+    <span class="hint" id="cfgmsg"></span>
+    <div class="note">💡 <b>Belum punya API key?</b> API key dibuat saat instalasi bot di VPS dan tersimpan di <code>/opt/habibi-bot/API_KEY.txt</code>. Endpoint bertanda 🔒 wajib pakai key.</div>
+  </div>
+
+  <div class="card">
+    <h3>🚀 Mulai Cepat</h3>
+    <p class="d">Contoh memakai curl:</p>
+    <div class="tabs">
+      <button class="tab on" onclick="showEx('curl',this)">cURL</button>
+      <button class="tab" onclick="showEx('js',this)">JavaScript</button>
+    </div>
+    <pre id="ex-curl"></pre>
+    <pre id="ex-js" style="display:none"></pre>
+  </div>
+
+  <h3 style="margin:26px 0 4px;font-size:17px">📡 Daftar Endpoint</h3>
+  <p style="color:var(--muted);font-size:13px">Ketuk endpoint untuk membuka tester interaktif.</p>
+  <div id="eps"></div>
+
+  <footer>
+    Habibi REST API v1.0.0 — dibuat oleh <b>Habibih Cloud ID</b><br>
+    <span style="font-size:11.5px">Hormati ToS YouTube & hak cipta. Gunakan untuk konten milik sendiri / bebas hak.</span>
+  </footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const DEF_BASE='https://cloud.habibi-api.web.id';
+let CFG={base:localStorage.getItem('hb_base')||DEF_BASE,key:localStorage.getItem('hb_key')||''};
+
+const ENDPOINTS=[
+ {m:'GET',p:'/api/status',auth:false,d:'Cek status & uptime server. Publik, tanpa key.',params:[]},
+ {m:'GET',p:'/api/menu',auth:false,d:'Daftar semua endpoint beserta contoh URL. Publik, tanpa key.',params:[]},
+ {m:'GET',p:'/api/sticker/info',auth:false,d:'Info format stiker WhatsApp yang didukung bot.',params:[
+   {n:'pack',ph:'Habibi Bot',d:'Nama pack stiker'},{n:'author',ph:'Habibih Cloud ID',d:'Nama pembuat'}]},
+ {m:'POST',p:'/api/ai',auth:true,d:'Chat dengan AI. Body JSON berisi "text".',params:[
+   {n:'text',in:'body',req:1,ph:'Ceritakan tentang Danau Toba',d:'Pertanyaan untuk AI (wajib)'}]},
+ {m:'GET',p:'/api/download/tiktok',auth:true,d:'Ambil info & link download video TikTok (tanpa watermark bila tersedia).',params:[
+   {n:'url',req:1,ph:'https://vt.tiktok.com/xxxx/',d:'Link video TikTok (wajib)'}]},
+ {m:'GET',p:'/api/download/ytmp3',auth:true,d:'Ambil link audio (m4a) dari video YouTube.',params:[
+   {n:'url',req:1,ph:'https://www.youtube.com/watch?v=xxxx atau judul lagu',d:'Link / judul video (wajib)'}]},
+ {m:'GET',p:'/api/download/ytmp4',auth:true,d:'Ambil link video MP4 dari YouTube.',params:[
+   {n:'url',req:1,ph:'https://www.youtube.com/watch?v=xxxx atau judul video',d:'Link / judul video (wajib)'}]},
+];
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function base(){return (CFG.base||DEF_BASE).replace(/\/$/,'')}
+function hdrs(){const h={};if(CFG.key)h['x-api-key']=CFG.key;return h}
+
+function renderEps(){
+  $('eps').innerHTML=ENDPOINTS.map((e,i)=>{
+    const ps=e.params.map(p=>
+      `<div><label>${esc(p.n)}${p.req?' *':''} <span style="opacity:.7">— ${esc(p.d||'')}</span></label>`+
+      (p.in==='body'
+        ? `<textarea id="f_${i}_${p.n}" placeholder="${esc(p.ph||'')}"></textarea>`
+        : `<input type="text" id="f_${i}_${p.n}" placeholder="${esc(p.ph||'')}">`)+`</div>`
+    ).join('');
+    return `<div class="ep" id="ep${i}">
+      <div class="ep-h" onclick="document.getElementById('ep${i}').classList.toggle('open')">
+        <span class="m ${e.m.toLowerCase()}">${e.m}</span>
+        <span class="path">${e.p}</span>
+        <span class="lock ${e.auth?'y':''}">${e.auth?'🔒 key':'🌐 publik'}</span>
+      </div>
+      <div class="ep-b">
+        <p class="d" style="margin-top:12px">${e.d}</p>
+        ${ps}
+        <div class="row" style="margin-top:6px">
+          <button class="btn" onclick="tryEp(${i})">▶ Jalankan</button>
+          <button class="btn ghost" onclick="copyCurl(${i})">📋 Salin cURL</button>
+        </div>
+        <pre id="r_${i}" style="display:none"></pre>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildReq(i){
+  const e=ENDPOINTS[i],url=new URL(base()+e.p),body={};
+  e.params.forEach(p=>{
+    const v=($('f_'+i+'_'+p.n)||{}).value||'';
+    if(p.in==='body'){if(v)body[p.n]=v;}
+    else if(v)url.searchParams.set(p.n,v);
+  });
+  return {e,url:url.toString(),body};
+}
+
+async function tryEp(i){
+  const {e,url,body}=buildReq(i),box=$('r_'+i);
+  box.style.display='block';box.className='';box.textContent='⏳ mengirim…';
+  const t0=Date.now();
+  try{
+    const opt={method:e.m,headers:{...hdrs()}};
+    if(e.m==='POST'){opt.headers['Content-Type']='application/json';opt.body=JSON.stringify(body);}
+    const r=await fetch(url,opt),t=await r.text();
+    let pretty=t;try{pretty=JSON.stringify(JSON.parse(t),null,2)}catch{}
+    box.className=r.ok?'resp-ok':'resp-err';
+    box.textContent=`HTTP ${r.status} • ${(Date.now()-t0)}ms\n\n`+pretty;
+  }catch(err){box.className='resp-err';box.textContent='❌ '+err.message+'\n\nPeriksa base URL & koneksi (CORS harus aktif di server).';}
+}
+
+function curlOf(i){
+  const {e,url,body}=buildReq(i);let c=`curl -s "${url}"`;
+  if(e.auth)c+=` \\\n  -H "x-api-key: ${CFG.key||'API_KEY_KAMU'}"`;
+  if(e.m==='POST')c+=` \\\n  -H "Content-Type: application/json" \\\n  -d '${JSON.stringify(body)}'`;
+  return c;
+}
+function copyCurl(i){navigator.clipboard.writeText(curlOf(i)).then(()=>{const b=$('r_'+i);b.style.display='block';b.className='';b.textContent='📋 cURL tersalin!';});}
+
+function showEx(k,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');
+  $('ex-curl').style.display=k==='curl'?'block':'none';
+  $('ex-js').style.display=k==='js'?'block':'none';
+}
+function renderEx(){
+  const b=base();
+  $('ex-curl').textContent=
+`# Status server (publik)
+curl -s "${b}/api/status"
+
+# Download TikTok (butuh key)
+curl -s "${b}/api/download/tiktok?url=https://vt.tiktok.com/xxxx/" \\
+  -H "x-api-key: API_KEY_KAMU"
+
+# Chat AI (butuh key)
+curl -s -X POST "${b}/api/ai" \\
+  -H "x-api-key: API_KEY_KAMU" \\
+  -H "Content-Type: application/json" \\
+  -d '{"text":"Halo, apa kabar?"}'`;
+  $('ex-js').textContent=
+`const BASE='${b}';
+const KEY='API_KEY_KAMU'; // header x-api-key
+
+// Status
+const st=await fetch(BASE+'/api/status').then(r=>r.json());
+
+// TikTok downloader
+const tt=await fetch(BASE+'/api/download/tiktok?url='+encodeURIComponent(url),
+  {headers:{'x-api-key':KEY}}).then(r=>r.json());
+
+// AI chat
+const ai=await fetch(BASE+'/api/ai',{method:'POST',
+  headers:{'x-api-key':KEY,'Content-Type':'application/json'},
+  body:JSON.stringify({text:'Halo'})}).then(r=>r.json());`;
+}
+
+function saveCfg(){
+  CFG.base=$('baseUrl').value.trim()||DEF_BASE;
+  CFG.key=$('apiKey').value.trim();
+  localStorage.setItem('hb_base',CFG.base);localStorage.setItem('hb_key',CFG.key);
+  $('cfgmsg').textContent='✅ tersimpan';renderEx();checkStatus();
+  setTimeout(()=>$('cfgmsg').textContent='',2500);
+}
+async function checkStatus(){
+  const d=$('dot'),t=$('stxt');d.className='dot';t.textContent='mengecek…';
+  try{
+    const r=await fetch(base()+'/api/status'),j=await r.json();
+    if(j.status){d.className='dot ok';t.textContent='online • uptime '+Math.floor((j.uptime_detik||0)/3600)+' jam';}
+    else{d.className='dot err';t.textContent='tidak ok';}
+  }catch{d.className='dot err';t.textContent='tidak terjangkau';}
+}
+$('baseUrl').value=CFG.base;$('apiKey').value=CFG.key;
+$('burl').textContent=CFG.base.replace(/^https?:\/\//,'');
+renderEps();renderEx();checkStatus();
+setInterval(checkStatus,60000);
+</script>
+</body>
+</html>
