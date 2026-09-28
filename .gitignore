@@ -1,0 +1,6 @@
+# Dependensi & file lokal — jangan di-commit
+node_modules/
+.env
+bot/session/
+*.log
+.DS_Store

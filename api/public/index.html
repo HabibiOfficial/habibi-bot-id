@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habibi Bot ID API — Dokumentasi</title>
+<meta name="description" content="Dokumentasi REST API Habibi Bot ID: AI chat, downloader TikTok & YouTube, info stiker.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand">
+      <span class="logo">🤖</span>
+      <div>
+        <h1>Habibi Bot ID API</h1>
+        <p>REST API untuk bot WhatsApp — AI chat, downloader &amp; utilitas</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="version" id="versi">v1.0.0</span>
+      <span class="status-dot" id="statusDot" title="Status server"><span class="pulse"></span><em>mengecek…</em></span>
+    </div>
+  </div>
+</header>
+
+<nav class="wrap toc">
+  <a href="#mulai">🚀 Mulai Cepat</a>
+  <a href="#auth">🔑 API Key</a>
+  <a href="#endpoints">📚 Endpoint</a>
+  <a href="#batas">⚖️ Batas &amp; Error</a>
+</nav>
+
+<main class="wrap">
+
+  <section id="mulai" class="card">
+    <h2>🚀 Mulai Cepat</h2>
+    <p>Semua endpoint mengembalikan JSON dengan format <code>{ "status": true/false, ... }</code>.
+    Endpoint bertanda <span class="badge auth">🔒 butuh key</span> wajib menyertakan header <code>x-api-key</code>.</p>
+    <p class="note">🌐 Base URL dokumentasi ini: <code id="baseUrl">memuat…</code>
+    <br><span class="muted">Di VPS lokal: <code>http://localhost:3000</code> · Publik (via Cloudflare Tunnel): <code>https://cloud.habibi-api.web.id</code></span></p>
+    <div class="codeblock">
+      <button class="copy" data-copy="curl -H 'x-api-key: KEY-KAMU' __BASE_URL__/api/status">⧉ Salin</button>
+      <pre><code id="contohCepat">curl -H 'x-api-key: KEY-KAMU' \
+  __BASE_URL__/api/status</code></pre>
+    </div>
+  </section>
+
+  <section id="auth" class="card">
+    <h2>🔑 Cara Pakai API Key</h2>
+    <ol class="steps">
+      <li>Minta API key ke admin, atau set sendiri via environment variable <code>API_KEY</code> di server.</li>
+      <li>Sertakan key di setiap request terproteksi lewat header HTTP <code>x-api-key</code>.</li>
+      <li>Key salah / tidak ada → server menjawab <code>401</code> dengan pesan <code>"API key tidak valid"</code>.</li>
+    </ol>
+    <div class="codeblock">
+      <button class="copy" data-copy="curl -H 'x-api-key: KEY-KAMU' -H 'Content-Type: application/json' -X POST -d '{\"text\":\"Halo!\"}' __BASE_URL__/api/ai">⧉ Salin</button>
+      <pre><code>curl -H 'x-api-key: KEY-KAMU' \
+  -H 'Content-Type: application/json' \
+  -X POST -d '{"text":"Halo!"}' \
+  __BASE_URL__/api/ai</code></pre>
+    </div>
+    <p class="note">⚠️ Jaga API key seperti password — jangan taruh di kode frontend publik atau repo git.</p>
+  </section>
+
+  <section id="endpoints">
+    <h2>📚 Daftar Endpoint</h2>
+    <p class="muted">Dimuat otomatis dari <code>GET /api/menu</code>.</p>
+    <div id="daftarEndpoint"><p class="muted">Memuat…</p></div>
+  </section>
+
+  <section id="batas" class="card">
+    <h2>⚖️ Rate Limit &amp; Kode Error</h2>
+    <ul class="errors">
+      <li><code>200</code> — Berhasil. Cek field <code>status: true</code> di body.</li>
+      <li><code>400</code> — Parameter tidak valid / kurang. Pesan menjelaskan yang kurang.</li>
+      <li><code>401</code> — API key tidak valid atau tidak disertakan (header <code>x-api-key</code>).</li>
+      <li><code>404</code> — Endpoint tidak ditemukan.</li>
+      <li><code>429</code> — Terlalu banyak request. Batas <strong>60 request/menit per IP</strong>.</li>
+      <li><code>502</code> — Layanan pihak ketiga (AI/TikTok/YouTube) gagal atau sibuk. Coba lagi nanti.</li>
+      <li><code>503</code> — Fitur belum dikonfigurasi di server (mis. <code>AI_API_URL</code> kosong atau binary <code>yt-dlp</code> belum terpasang).</li>
+    </ul>
+    <p class="note">📌 Catatan: direct URL dari YouTube bersifat sementara dan bisa kedaluwarsa (biasanya dalam beberapa jam) — unduh segera setelah diterima.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Habibih Cloud ID — Habibi Bot ID API</p>
+    <p class="muted">Dibuat dengan ❤️ untuk komunitas.</p>
+  </div>
+</footer>
+
+<script>
+// Ganti token __BASE_URL__ dengan origin aktual halaman ini:
+// - http://localhost:3000 saat dibuka di VPS
+// - https://cloud.habibi-api.web.id saat dibuka via Cloudflare Tunnel
+(function () {
+  var base = window.location.origin.replace(/\/$/, '');
+  document.querySelectorAll('[data-copy]').forEach(function (el) {
+    el.setAttribute('data-copy', el.getAttribute('data-copy').split('__BASE_URL__').join(base));
+  });
+  document.querySelectorAll('code').forEach(function (el) {
+    if (el.textContent.indexOf('__BASE_URL__') !== -1) {
+      el.textContent = el.textContent.split('__BASE_URL__').join(base);
+    }
+  });
+  var b = document.getElementById('baseUrl');
+  if (b) b.textContent = base;
+})();
+</script>
+<script src="app.js"></script>
+</body>
+</html>
