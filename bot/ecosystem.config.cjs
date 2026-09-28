@@ -1,15 +1,14 @@
-// Konfigurasi PM2 untuk Habibi Bot ID.
-// Jalankan dari folder bot/:  pm2 start ecosystem.config.js
-import { fileURLToPath } from 'node:url';
+// Konfigurasi PM2 untuk Habibi Bot ID (CommonJS — kompatibel dengan PM2).
+// Jalankan dari folder bot/:  pm2 start ecosystem.config.cjs
+// Catatan: file .js tidak dipakai karena bot memakai "type": "module"
+// sehingga sintaks ESM (import/export) tidak bisa dibaca PM2.
 
-const BOT_DIR = fileURLToPath(new URL('.', import.meta.url));
-
-export default {
+module.exports = {
   apps: [
     {
       name: 'habibi-bot',
       script: 'index.js',
-      cwd: BOT_DIR,
+      cwd: __dirname,
       interpreter: 'node',
       instances: 1,
       exec_mode: 'fork',

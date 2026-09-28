@@ -316,8 +316,8 @@ start_app() { # start_app <nama> <dir> <ecosystem> <fallback-entry>
   fi
 }
 
-start_app "habibi-bot" "$INSTALL_DIR/bot" "$INSTALL_DIR/bot/ecosystem.config.js" "index.js"
-start_app "habibi-api" "$INSTALL_DIR/api" "$INSTALL_DIR/api/ecosystem.config.js" "index.js"
+start_app "habibi-bot" "$INSTALL_DIR/bot" "$INSTALL_DIR/bot/ecosystem.config.cjs" "index.js"
+start_app "habibi-api" "$INSTALL_DIR/api" "$INSTALL_DIR/api/ecosystem.config.cjs" "index.js"
 
 pm2 save
 # Aktifkan auto-start saat VPS reboot (abaikan kalau gagal)

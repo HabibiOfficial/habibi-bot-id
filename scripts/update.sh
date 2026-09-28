@@ -144,8 +144,8 @@ restart_app() { # restart_app <nama> <dir> <ecosystem> <fallback-entry>
     pm2 start "$dir/$fallback" --name "$nama"
   fi
 }
-restart_app "habibi-bot" "$INSTALL_DIR/bot" "$INSTALL_DIR/bot/ecosystem.config.js" "index.js"
-restart_app "habibi-api" "$INSTALL_DIR/api" "$INSTALL_DIR/api/ecosystem.config.js" "index.js"
+restart_app "habibi-bot" "$INSTALL_DIR/bot" "$INSTALL_DIR/bot/ecosystem.config.cjs" "index.js"
+restart_app "habibi-api" "$INSTALL_DIR/api" "$INSTALL_DIR/api/ecosystem.config.cjs" "index.js"
 pm2 save
 ok "Bot & API di-restart."
 
