@@ -9,6 +9,9 @@ import { readFile, readdir, stat, rm, mkdir } from 'node:fs/promises';
 
 const TIMEOUT = 120000; // 120 detik
 const BATAS_UKURAN = 90 * 1024 * 1024; // 90 MB — batas aman kirim media WhatsApp
+// Bypass challenge "Sign in to confirm you're not a bot" yang sering muncul
+// dari IP datacenter/VPS: pakai player client Android yang jarang kena challenge.
+const YT_BYPASS = ['--extractor-args', 'youtube:player_client=android'];
 
 function jalankan(cmd, args, timeout = TIMEOUT) {
   return new Promise((resolve, reject) => {
@@ -46,7 +49,7 @@ const formatDurasi = (d) => {
 // Cari video: URL langsung atau hasil pencarian ytsearch1
 async function cariVideo(query) {
   if (/^https?:\/\//i.test(query)) {
-    const out = await jalankan('yt-dlp', ['--dump-json', '--no-playlist', '--no-warnings', query]);
+    const out = await jalankan('yt-dlp', ['--dump-json', '--no-playlist', '--no-warnings', ...YT_BYPASS, query]);
     const info = JSON.parse(out.split('\n').find((l) => l.trim().startsWith('{')) || '{}');
     if (!info.id) throw new Error('video tidak ditemukan / tidak bisa dibaca');
     return {
@@ -56,7 +59,7 @@ async function cariVideo(query) {
       durasi: formatDurasi(info.duration),
     };
   }
-  const out = await jalankan('yt-dlp', ['--dump-json', '--no-playlist', '--no-warnings', `ytsearch1:${query}`]);
+  const out = await jalankan('yt-dlp', ['--dump-json', '--no-playlist', '--no-warnings', ...YT_BYPASS, `ytsearch1:${query}`]);
   const info = JSON.parse(out.split('\n').find((l) => l.trim().startsWith('{')) || '{}');
   if (!info.id) throw new Error('video tidak ditemukan untuk pencarian itu');
   return {
@@ -72,7 +75,7 @@ async function unduhAudio(url) {
   await mkdir(dir, { recursive: true });
   try {
     const pola = path.join(dir, 'hasil.%(ext)s');
-    await jalankan('yt-dlp', ['-x', '--audio-format', 'mp3', '--audio-quality', '0', '--no-playlist', '--no-warnings', '-o', pola, url]);
+    await jalankan('yt-dlp', ['-x', '--audio-format', 'mp3', '--audio-quality', '0', '--no-playlist', '--no-warnings', ...YT_BYPASS, '-o', pola, url]);
     const files = (await readdir(dir)).filter((f) => !f.startsWith('.'));
     if (!files.length) throw new Error('file hasil unduhan tidak ditemukan');
     const filePath = path.join(dir, files[0]);
