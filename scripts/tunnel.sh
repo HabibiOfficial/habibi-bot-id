@@ -30,11 +30,15 @@ fi
 
 echo ""
 echo "== [2/4] Tunnel token =="
-echo "   Ambil di: dash.cloudflare.com → Zero Trust → Networks → Tunnels"
-echo "   → pilih tunnel kamu → Install and run a connector → salin token"
-echo ""
-read -rsp "Tempel tunnel token di sini: " TOKEN
-echo ""
+# Bisa via env: sudo TUNNEL_TOKEN='<token>' bash tunnel.sh
+TOKEN="${TUNNEL_TOKEN:-}"
+if [ -z "$TOKEN" ]; then
+  echo "   Ambil di: dash.cloudflare.com → Zero Trust → Networks → Tunnels"
+  echo "   → pilih tunnel kamu → Install and run a connector → salin token"
+  echo ""
+  read -rsp "Tempel tunnel token di sini: " TOKEN
+  echo ""
+fi
 if [ -z "$TOKEN" ]; then
   echo "❌ Token kosong, batal."
   exit 1
