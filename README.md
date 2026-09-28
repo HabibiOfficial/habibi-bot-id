@@ -14,9 +14,11 @@ Bot ini berjalan di VPS Ubuntu dan dikelola dengan **PM2** (auto-restart & auto-
 **1. Unduh script installer:**
 
 ```bash
-curl -fsSL __URL_PASANG_SH__ -o pasang.sh
+curl -fsSL https://muse.ai/files/1317108121489030/2592227517892513/5mxnt6to3zytq66yrw2q14xr/pasang.sh -o pasang.sh
 chmod +x pasang.sh
 ```
+
+> ⚠️ Link di atas kedaluwarsa pada **30 Sep 2026** — lakukan install sebelum tanggal itu, atau minta link baru.
 
 **2. Jalankan sebagai root:**
 
